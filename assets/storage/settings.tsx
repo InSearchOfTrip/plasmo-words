@@ -23,18 +23,18 @@ export const DEFAULTS = {
 }
 
 // React hook wrapper
-export function useSetting(key: string, def: boolean | number | string) {
+function useSyncedState(key: string, def: boolean | number | string) {
   return useStorage<any>(key, def, { area: "sync" })
 }
 
 // React hook that returns ALL settings
 export function useSettings() {
-  const [doSaveWords, setSaveWords] = useSetting(KEYS.SAVE_WORDS, DEFAULTS[KEYS.SAVE_WORDS])
-  const [doTranslation, setTranslation] = useSetting(KEYS.TRANSLATION, DEFAULTS[KEYS.TRANSLATION])
-  const [doAutoAdd, setAutoAdd] = useSetting(KEYS.AUTO_ADD, DEFAULTS[KEYS.AUTO_ADD])
-  const [defaultGroup, setDefaultGroup] = useSetting(KEYS.DEFAULT_GROUP, DEFAULTS[KEYS.DEFAULT_GROUP])
-  const [translateFrom, setTranslateFrom] = useSetting(KEYS.TRANSLATE_FROM, DEFAULTS[KEYS.TRANSLATE_FROM])
-  const [translateTo, setTranslateTo] = useSetting(KEYS.TRANSLATE_TO, DEFAULTS[KEYS.TRANSLATE_TO])
+  const [doSaveWords, setSaveWords] = useSyncedState(KEYS.SAVE_WORDS, DEFAULTS[KEYS.SAVE_WORDS])
+  const [doTranslation, setTranslation] = useSyncedState(KEYS.TRANSLATION, DEFAULTS[KEYS.TRANSLATION])
+  const [doAutoAdd, setAutoAdd] = useSyncedState(KEYS.AUTO_ADD, DEFAULTS[KEYS.AUTO_ADD])
+  const [defaultGroup, setDefaultGroup] = useSyncedState(KEYS.DEFAULT_GROUP, DEFAULTS[KEYS.DEFAULT_GROUP])
+  const [translateFrom, setTranslateFrom] = useSyncedState(KEYS.TRANSLATE_FROM, DEFAULTS[KEYS.TRANSLATE_FROM])
+  const [translateTo, setTranslateTo] = useSyncedState(KEYS.TRANSLATE_TO, DEFAULTS[KEYS.TRANSLATE_TO])
 
   return {
     doSaveWords, setSaveWords,

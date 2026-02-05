@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchTranslation } from "~assets/helpers/translation";
 
 import { useSettings } from "../assets/storage/settings";
+import { useWords , useCollections } from "../assets/storage/collections"
 
 import bootstrap from "data-text:../assets/styles/bootstrap.min.css";
 import normalize from "data-text:../assets/styles/normalize.css";
@@ -39,7 +40,10 @@ export default function Popup() {
         setTranslateFrom,
         translateTo,
         setTranslateTo
-    } = useSettings()
+    } = useSettings();
+
+    const { words, addWord, deleteWord } = useWords();
+    const { collections, addCollection } = useCollections();
 
     const [visible, setVisible] = useState(false);
     const [text, setText] = useState<string>("");
@@ -108,6 +112,8 @@ export default function Popup() {
                         </div>
                     </div>
                 )}
+
+                
 
                 {doSaveWords && (
                     <div className="row">
