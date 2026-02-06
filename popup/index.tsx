@@ -16,28 +16,28 @@ function IndexPopup() {
     deleteWord(id)
   }
   return (
-    <div className="words bg">
+    <div className="words p-2 bg">
       <div className="container">
         <h2 className="fs-2">Words</h2>
       </div>
       <div className="container">
-        {Object.entries(words).map(([key, value]) => {
-          return (
+        <div className="row mb-1">
+          {Object.entries(words)
+          .sort(([, a], [, b]) => (b.priority) - (a.priority))
+          .map(([key, value]) => (
             <div className="row" key={value.id ?? key}>
               <div className="col-5">{value.originalText}</div>
               <div className="col-5">{value.translatedText}</div>
               <div className="col-1">{value.priority}</div>
               <div className="col-1">
                 <button
-                  onClick={(value) => {
-                    deleteTheWord(value.id ?? key)
-                  }}
-                  className="btn btn-close"
+                  onClick={() => deleteTheWord(value.id ?? key)}
+                  className="btn btn-close btn-danger"
                 />
               </div>
             </div>
-          )
-        })}
+          ))}
+        </div>
 
         <div className="row">
           <a className="btn btn-primary" href="options.html">
