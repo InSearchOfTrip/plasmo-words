@@ -43,16 +43,18 @@ export default function Popup() {
     } = useSettings();
 
     const { words, addWord, deleteWord } = useWords();
-    const { collections, addCollection } = useCollections();
-
-    const [visible, setVisible] = useState(false);
+    const { collections, collectionByDefault, setCollectionByDefault, addCollection } = useCollections();
+    const [visible, setVisible] = useState<boolean>(false);
     const [text, setText] = useState<string>("");
     const [translation, setTranslationText] = useState<string>("");
     const [position, setPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
 
     const timeoutRef = useRef(null);
 
-
+    function  addTheWord (){
+        addWord(text , translation , collectionByDefault);
+        setVisible(false);
+    };
 
     useEffect(() => {
         const onDblClick = async (e: MouseEvent) => {
@@ -83,6 +85,7 @@ export default function Popup() {
                 clearTimeout(timeoutRef.current);
             }
         }
+        
 
     }, [])
 
@@ -113,12 +116,27 @@ export default function Popup() {
                     </div>
                 )}
 
-                
+                {doTranslation && (
+                    <div className="row mb-3">
+                        <div className="container">
+                            <select
+                                className="form-select"
+                                id=""
+                                value={String(collectionByDefault ?? "")}
+                                onChange={(e) => setCollectionByDefault(e.target.value)}>
+                                {Object.entries(collections).map(([id, el]) => (
+                                    <option key={id} value={id}>{el.name}</option>
+                                ))}
+
+                            </select>
+                        </div>
+                    </div>
+                )}
 
                 {doSaveWords && (
                     <div className="row">
                         <div className="container">
-                            <button className="btn btn-primary w-100">Add word</button>
+                            <button className="btn btn-primary w-100" onClick={addTheWord}>Add word</button>
                         </div>
                     </div>
                 )}

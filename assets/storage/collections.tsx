@@ -35,9 +35,14 @@ export const DEFAULTS = {
             id,
             name: "General",
             createdAt: Date.now()
+        },
+        "main": {
+            id: "main",
+            name: "Main",
+            createdAt: Date.now()
         }
     },
-    [KEYS.COLLECTION_BY_DEFAULT]: null,
+    [KEYS.COLLECTION_BY_DEFAULT]: id,
 };
 
 
@@ -79,7 +84,7 @@ export function useWords() {
             originalText,
             translatedText,
             collectionId,
-            priority: 0,
+            priority: 1,
             createdAt: Date.now()
         };
 
@@ -104,8 +109,8 @@ export function useWords() {
 // Хук для работы с коллекциями
 export function useCollections() {
     // Текущее состояние коллекций (словарь id → collection) и функция обновления
-    const [collections, setCollections] = useStorage<Record<string, collection>>(KEYS.COLLECTIONS, DEFAULTS[KEYS.COLLECTIONS]);
-
+    const [collections, setCollections] = useSyncedState(KEYS.COLLECTIONS, DEFAULTS[KEYS.COLLECTIONS]);
+    const [collectionByDefault, setCollectionByDefault] = useSyncedState(KEYS.COLLECTION_BY_DEFAULT, DEFAULTS[KEYS.COLLECTION_BY_DEFAULT])
     // Добавление новой коллекции
     function addCollection(name: string) {
         const newCollection: collection = {
@@ -135,5 +140,5 @@ export function useCollections() {
         setCollections(rest);
     }
 
-    return { collections, addCollection, renameCollection, deleteCollection };
+    return { collections, collectionByDefault , setCollectionByDefault, addCollection, renameCollection, deleteCollection };
 }
