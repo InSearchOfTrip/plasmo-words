@@ -21,15 +21,15 @@ function IndexPopup() {
         <h2 className="fs-2">Words</h2>
       </div>
       <div className="container">
-        <div className="row mb-1">
+        <div className="mb-1">
           {Object.entries(words)
           .sort(([, a], [, b]) => (b.priority) - (a.priority))
           .map(([key, value]) => (
             <div className="row" key={value.id ?? key}>
-              <div className="col-5">{value.originalText}</div>
-              <div className="col-5">{value.translatedText}</div>
-              <div className="col-1">{value.priority}</div>
-              <div className="col-1">
+              <div className="col-5 d-fex align-items-center">{value.originalText}</div>
+              <div className="col-5 d-fex align-items-center">{value.translatedText}</div>
+              <div className="col-1 d-fex align-items-center">{value.priority}</div>
+              <div className="col-1 d-fex align-items-center">
                 <button
                   onClick={() => deleteTheWord(value.id ?? key)}
                   className="btn btn-close btn-danger"
