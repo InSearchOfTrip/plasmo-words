@@ -4,136 +4,168 @@ import { useStorage } from "@plasmohq/storage/hook"
 export const storage = new Storage({ area: "sync" })
 
 type word = {
-    id: string;
-    originalText: string;
-    translatedText: string;
-    collectionId: string[] | null;
-    priority: number;
-    createdAt: number; // new Date().toISOString()
+  id: string
+  originalText: string
+  translatedText: string
+  collectionId: string[] | null
+  priority: number
+  createdAt: number // new Date().toISOString()
 }
 
 type collection = {
-    id: string;
-    name: string;
-    createdAt: number; // new Date().toISOString()
+  id: string
+  name: string
+  createdAt: number // new Date().toISOString()
 }
 
-type collections = Record<string, collection>;
+type collections = Record<string, collection>
 
 export const KEYS = {
-    WORDS: "words",
-    COLLECTIONS: "collections",
-    COLLECTION_BY_DEFAULT: "collectionByDefault",
+  WORDS: "words",
+  COLLECTIONS: "collections",
+  COLLECTION_BY_DEFAULT: "collectionByDefault"
 } as const
 
-
-const id = crypto.randomUUID();
+const id = crypto.randomUUID()
 export const DEFAULTS = {
-    [KEYS.WORDS]: {},
-    [KEYS.COLLECTIONS]: {
-        [id]: {
-            id,
-            name: "General",
-            createdAt: Date.now()
-        }
-    },
-    [KEYS.COLLECTION_BY_DEFAULT]: id,
-};
-
-
-
-function useSyncedState(key: string, def: boolean | number | string | collections) {
-    return useStorage<any>(key, def, { area: "sync" })
+  [KEYS.WORDS]: {},
+  [KEYS.COLLECTIONS]: {
+    [id]: {
+      id,
+      name: "General",
+      createdAt: Date.now()
+    }
+  },
+  [KEYS.COLLECTION_BY_DEFAULT]: id
 }
 
+function useSyncedState(
+  key: string,
+  def: boolean | number | string | collections
+) {
+  return useStorage<any>(key, def, { area: "sync" })
+}
 
 export function useWords() {
-    // Получаем текущее состояние списка слов (словарь id → word) и функцию обновления
-    const [words, setWords] = useSyncedState(KEYS.WORDS, DEFAULTS[KEYS.WORDS]);
+  // Получаем текущее состояние списка слов (словарь id → word) и функцию обновления
+  const [words, setWords] = useSyncedState(KEYS.WORDS, DEFAULTS[KEYS.WORDS])
 
-    // Функция добавления нового слова
-    function addWord(originalText: string, translatedText: string, collectionId: string | null) {
-        // Ищем существующее слово
-        const existingEntry = Object.entries(words).find(
-            ([_, word]) => word.originalText.toLowerCase() === originalText.toLowerCase()
-        );
+  // Функция добавления нового слова
+  function addWord(
+    originalText: string,
+    translatedText: string,
+    collectionId: string | null
+  ) {
+    setWords((prevWords) => {
+      const existingEntry = Object.entries(prevWords).find(
+        ([_, w]) => w.originalText.toLowerCase() === originalText.toLowerCase()
+      )
 
-        // Если нашли — увеличиваем priority
-        if (existingEntry) {
-            const [id, word] = existingEntry;
+      // ✅ Если нашли
+      if (existingEntry) {
+        const [id, w] = existingEntry
 
-            setWords({
-                ...words,
-                [id]: {
-                    ...word,
-                    priority: word.priority + 1
-                }
-            });
-
-            return;
+        // если коллекция не передана — просто увеличим priority (или можно ничего не делать)
+        if (!collectionId) {
+          return {
+            ...prevWords,
+            [id]: { ...w, priority: w.priority + 1 }
+          }
         }
 
-        // Если не нашли — создаём новое
-        const newWord: word = {
-            id: crypto.randomUUID(),
-            originalText,
-            translatedText,
-            collectionId,
-            priority: 1,
-            createdAt: Date.now()
-        };
+        // ✅ дописываем collectionId в массив, но без дублей
+        const hasCollection = w.collectionIds.includes(collectionId)
+        const nextCollectionIds = hasCollection
+          ? w.collectionIds
+          : [...w.collectionIds, collectionId]
 
-        setWords({
-            ...words,
-            [newWord.id]: newWord
-        });
-    }
+        return {
+          ...prevWords,
+          [id]: {
+            ...w,
+            // если хочешь увеличивать при любом повторе:
+            priority: w.priority + 1,
+            // или если хочешь увеличивать только при добавлении в новую коллекцию:
+            // priority: hasCollection ? w.priority : w.priority + 1,
+            collectionIds: nextCollectionIds
+          }
+        }
+      }
 
+      // ✅ Если не нашли — создаём новое
+      const newWord: word = {
+        id: crypto.randomUUID(),
+        originalText,
+        translatedText,
+        collectionIds: collectionId ? [collectionId] : [],
+        priority: 1,
+        createdAt: Date.now()
+      }
 
-    // Функция удаления слова по ID
-    function deleteWord(id: string) {
-        if (!(id in words)) return;
-        const { [id]: _, ...rest } = words;
-        setWords(rest);
-    }
+      return {
+        ...prevWords,
+        [newWord.id]: newWord
+      }
+    })
+  }
 
+  // Функция удаления слова по ID
+  function deleteWord(id: string) {
+    if (!(id in words)) return
+    const { [id]: _, ...rest } = words
+    setWords(rest)
+  }
 
-    return { words, addWord, deleteWord };
+  return { words, addWord, deleteWord }
 }
 
 // Хук для работы с коллекциями
 export function useCollections() {
-    // Текущее состояние коллекций (словарь id → collection) и функция обновления
-    const [collections, setCollections] = useSyncedState(KEYS.COLLECTIONS, DEFAULTS[KEYS.COLLECTIONS]);
-    const [collectionByDefault, setCollectionByDefault] = useSyncedState(KEYS.COLLECTION_BY_DEFAULT, DEFAULTS[KEYS.COLLECTION_BY_DEFAULT])
-    // Добавление новой коллекции
-    function addCollection(name: string) {
-        const newCollection: collection = {
-            id: crypto.randomUUID(),
-            name,
-            createdAt: Date.now()
-        };
-        setCollections({
-            ...collections,
-            [newCollection.id]: newCollection
-        });
+  // Текущее состояние коллекций (словарь id → collection) и функция обновления
+  const [collections, setCollections] = useSyncedState(
+    KEYS.COLLECTIONS,
+    DEFAULTS[KEYS.COLLECTIONS]
+  )
+  const [collectionByDefault, setCollectionByDefault] = useSyncedState(
+    KEYS.COLLECTION_BY_DEFAULT,
+    DEFAULTS[KEYS.COLLECTION_BY_DEFAULT]
+  )
+  // Добавление новой коллекции
+  function addCollection(name: string) {
+    const newCollection: collection = {
+      id: crypto.randomUUID(),
+      name,
+      createdAt: Date.now()
     }
+    setCollections({
+      ...collections,
+      [newCollection.id]: newCollection
+    })
+    setCollectionByDefault(newCollection.id)
+  }
 
-    // Переименование существующей коллекции
-    function renameCollection(id: string, newName: string) {
-        if (!collections[id]) return;
-        setCollections({
-            ...collections,
-            [id]: { ...collections[id], name: newName }
-        });
-    }
+  // Переименование существующей коллекции
+  function renameCollection(id: string, newName: string) {
+    if (!collections[id]) return
+    setCollections({
+      ...collections,
+      [id]: { ...collections[id], name: newName }
+    })
+  }
 
-    // Удаление коллекции по ID
-    function deleteCollection(id: string) {
-        if (!(id in collections)) return;
-        const { [id]: _, ...rest } = collections;
-        setCollections(rest);
-    }
+  // Удаление коллекции по ID
+  function deleteCollection(id: string) {
+    if (!(id in collections)) return
+    const { [id]: _, ...rest } = collections
+    setCollections(rest)
+  }
 
-    return { collections, collectionByDefault , setCollectionByDefault, addCollection, renameCollection, deleteCollection };
+  return {
+    collections,
+    collectionByDefault,
+    setCollectionByDefault,
+    addCollection,
+    renameCollection,
+    deleteCollection
+  }
 }

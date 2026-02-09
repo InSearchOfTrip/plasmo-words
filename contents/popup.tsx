@@ -52,7 +52,7 @@ export default function Popup() {
     addCollection
   } = useCollections()
   const [visible, setVisible] = useState<boolean>(false)
-  const [showAddCategory, setShowAddCategory] = useState<boolean>(false)
+  const [showAddCollection, setShowAddCollection] = useState<boolean>(false)
   const [text, setText] = useState<string>("")
   const [newCollectionName, setNewCollectionName] = useState<string>("")
   const [translation, setTranslationText] = useState<string>("")
@@ -68,9 +68,9 @@ export default function Popup() {
     setVisible(false)
   }
 
-  function createList() {
-    addCollection(newCollectionName)
-    setShowAddCategory(false)
+  function createCollection() {
+    addCollection(newCollectionName);
+    setShowAddCollection(false);
   }
 
   useEffect(() => {
@@ -153,12 +153,12 @@ export default function Popup() {
               </div>
               <button
                 className="btn p-0"
-                onClick={() => setShowAddCategory(!showAddCategory)}>
+                onClick={() => setShowAddCollection(!showAddCollection)}>
                 <Plus className="add_icon" />
               </button>
             </div>
           )}
-          {showAddCategory && (
+          { (showAddCollection && doSaveWords) && (
             <div className="d-flex mb-3 align-items-stretch">
               <div className="flex-grow-1 pr-2px">
                 <input
@@ -167,7 +167,7 @@ export default function Popup() {
                   className="form-control"
                   placeholder="Name of the list" />
               </div>
-              <button className="btn btn-primary" onClick={createList}>
+              <button className="btn btn-primary" onClick={createCollection}>
                 <b>Create</b>
               </button>
             </div>

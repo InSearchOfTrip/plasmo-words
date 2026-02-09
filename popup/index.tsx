@@ -11,7 +11,7 @@ import settingsSVG from "data-base64:~assets/icons/settings.svg"
 function IndexPopup() {
   const [data, setData] = useState("");
   const { words, deleteWord } = useWords();
-
+  const {collections} = useCollections();
   function deleteTheWord(id) {
     deleteWord(id);
   }
