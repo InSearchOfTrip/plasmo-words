@@ -1,6 +1,7 @@
 import { useState } from "react"
-import WordsTable from "./WordsTable";
+
 import { useCollections, useWords } from "../assets/storage/collections"
+import WordsTable from "./WordsTable"
 
 import "../assets/styles/normalize.css"
 import "../assets/styles/bootstrap.min.css"
@@ -10,23 +11,18 @@ import settingsSVG from "data-base64:~assets/icons/settings.svg"
 
 function IndexPopup() {
   const [data, setData] = useState("");
-  
-  const { words, deleteWord } = useWords()
-  const { collections } = useCollections()
+  const { words, deleteWord } = useWords();
+  const { collections } = useCollections();
 
   function deleteTheWord(id) {
     deleteWord(id)
   }
   return (
     <div className="words p-2 shadow border-dark-subtle pr-0 bg-white">
-
-
-      <div className="container pr-0">
         <div className="scroll">
           <h2 className="fs-2 text-center">Words list</h2>
           {Object.keys(words).length > 0 ? (
             Object.values(collections).map((collection) => {
-
               const collectionWords = Object.values(words).filter((word) =>
                 word.collectionIds.includes(collection.id)
               )
@@ -34,7 +30,11 @@ function IndexPopup() {
               if (collectionWords.length === 0) return null
 
               return (
-                <WordsTable key="collection.id" collection={collection} collectionWords={collectionWords} />
+                <WordsTable
+                  key="collection.id"
+                  collection={collection}
+                  collectionWords={collectionWords}
+                />
               )
             })
           ) : (
@@ -43,12 +43,11 @@ function IndexPopup() {
             </div>
           )}
         </div>
-        <div className="row">
-          <a className="btn btn-primary" href="options.html">
+        <div className="pe-2">
+          <a className="btn btn-primary w-100" href="options.html">
             Settings
           </a>
         </div>
-      </div>
     </div>
   )
 }
