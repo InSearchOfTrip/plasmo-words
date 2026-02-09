@@ -10,44 +10,42 @@ import "./style.scss"
 import settingsSVG from "data-base64:~assets/icons/settings.svg"
 
 function IndexPopup() {
-  const [data, setData] = useState("");
-  const { words, deleteWord } = useWords();
-  const { collections } = useCollections();
+  const [data, setData] = useState("")
+  const { words, deleteWord } = useWords()
+  const { collections } = useCollections()
 
   function deleteTheWord(id) {
     deleteWord(id)
   }
   return (
     <div className="words p-2 shadow border-dark-subtle pr-0 bg-white">
-        <div className="scroll">
-          <h2 className="fs-2 text-center">Words list</h2>
-          {Object.keys(words).length > 0 ? (
-            Object.values(collections).map((collection) => {
-              const collectionWords = Object.values(words).filter((word) =>
-                word.collectionIds.includes(collection.id)
-              )
+      <div className="scroll">
+        <h2 className="fs-2 text-center">Words list</h2>
+        {Object.keys(words).length > 0 ? (
+          Object.values(collections).map((collection) => {
+            const collectionWords = Object.values(words).filter((word) =>
+              word.collectionIds.includes(collection.id)
+            )
 
-              if (collectionWords.length === 0) return null
+            if (collectionWords.length === 0) return null
 
-              return (
-                <WordsTable
-                  key="collection.id"
-                  collection={collection}
-                  collectionWords={collectionWords}
-                />
-              )
-            })
-          ) : (
-            <div className="row">
-              <p className="text p-0"> You don't have added words yet</p>
-            </div>
-          )}
-        </div>
-        <div className="pe-2">
-          <a className="btn btn-primary w-100" href="options.html">
-            Settings
-          </a>
-        </div>
+            return (
+              <WordsTable
+                key="collection.id"
+                collection={collection}
+                collectionWords={collectionWords}
+              />
+            )
+          })
+        ) : (
+          <p className="text p-0"> You don't have added words yet</p>
+        )}
+      </div>
+      <div className="pe-2">
+        <a className="btn btn-primary w-100" href="options.html">
+          Settings
+        </a>
+      </div>
     </div>
   )
 }
