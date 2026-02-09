@@ -18,7 +18,7 @@ type collection = {
   createdAt: number // new Date().toISOString()
 }
 
-type collections = Record<string, collection>
+type collections = Record<collection>
 
 export const KEYS = {
   WORDS: "words",

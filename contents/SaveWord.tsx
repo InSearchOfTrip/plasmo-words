@@ -28,7 +28,7 @@ function uppercase(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-export default function Popup() {
+export default function SaveWord() {
   const {
     doSaveWords,
     setSaveWords,
@@ -176,7 +176,7 @@ export default function Popup() {
           {doSaveWords && (
             <div className="row">
               <div className="col">
-                <button className="btn btn-primary w-100" onClick={addTheWord}>
+                <button className="btn btn-primary w-100"  disabled={showAddCollection} onClick={addTheWord}>
                   <b>Add word</b>
                 </button>
               </div>
