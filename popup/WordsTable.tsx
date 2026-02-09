@@ -1,0 +1,55 @@
+import { useState } from "react"
+
+import { useCollections, useWords } from "../assets/storage/collections"
+
+function WordsTable(props) {
+  const { collection, collectionWords } = props
+  const [doShow, setDoShow] = useState(false)
+  const { words, deleteWord } = useWords()
+
+  function deleteTheWord(id) {
+    deleteWord(id)
+  }
+  return (
+    <div className="mb-4">
+      <div
+        className="d-flex justify-content-between align-items-center pointer"
+        onClick={() => {
+          setDoShow(!doShow)
+        }}>
+        <h4 className="fs-4">{collection.name}</h4>{" "}
+        <p className="text m-0">{collectionWords.length} words</p>
+      </div>
+
+      <table
+        className={`table-striped. ${doShow ? "table" : "d-none"}`}>
+        <thead>
+          <tr>
+            <th>Original</th>
+            <th>Translation</th>
+            <th className="text-center">Priority</th>
+            <th className="text-end">Delete</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {collectionWords.map((value, key) => (
+            <tr key={value.id ?? key}>
+              <td>{value.originalText}</td>
+              <td>{value.translatedText}</td>
+              <td className="text-center">{value.priority}</td>
+              <td className="text-end">
+                <button
+                  onClick={() => deleteTheWord(value.id ?? String(key))}
+                  className="btn btn-close btn-danger"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+export default WordsTable
