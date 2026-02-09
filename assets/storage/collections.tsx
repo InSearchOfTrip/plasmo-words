@@ -7,7 +7,7 @@ type word = {
     id: string;
     originalText: string;
     translatedText: string;
-    collectionId: string | null;
+    collectionId: string[] | null;
     priority: number;
     createdAt: number; // new Date().toISOString()
 }
@@ -34,11 +34,6 @@ export const DEFAULTS = {
         [id]: {
             id,
             name: "General",
-            createdAt: Date.now()
-        },
-        "main": {
-            id: "main",
-            name: "Main",
             createdAt: Date.now()
         }
     },

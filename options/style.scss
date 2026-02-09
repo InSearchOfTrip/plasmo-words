@@ -1,14 +1,9 @@
-.settings{  
+.settings{
     min-width: 400px;
     &_img{
         display: block;
         width: 16px;
         height: 16px;
-        margin: 4px 6px 0;
-    }
-    &_text{
-        display: block;
-        margin: 0;
-        padding: 0;
+        margin: 0 6px;
     }
 }

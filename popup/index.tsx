@@ -9,34 +9,46 @@ import "./style.scss"
 import settingsSVG from "data-base64:~assets/icons/settings.svg"
 
 function IndexPopup() {
-  const [data, setData] = useState("")
-  const { words, deleteWord } = useWords()
-  console.log(Object.entries(words))
+  const [data, setData] = useState("");
+  const { words, deleteWord } = useWords();
+
   function deleteTheWord(id) {
-    deleteWord(id)
+    deleteWord(id);
   }
   return (
-    <div className="words p-2 bg">
+    <div className="words p-2 shadow border-dark-subtle p-2 bg-white">
       <div className="container">
-        <h2 className="fs-2">Words</h2>
+        <h2 className="fs-2">Words list</h2>
       </div>
-      <div className="container">
-        <div className="mb-1">
-          {Object.entries(words)
-          .sort(([, a], [, b]) => (b.priority) - (a.priority))
-          .map(([key, value]) => (
-            <div className="row" key={value.id ?? key}>
-              <div className="col-5 d-fex align-items-center">{value.originalText}</div>
-              <div className="col-5 d-fex align-items-center">{value.translatedText}</div>
-              <div className="col-1 d-fex align-items-center">{value.priority}</div>
-              <div className="col-1 d-fex align-items-center">
-                <button
-                  onClick={() => deleteTheWord(value.id ?? key)}
-                  className="btn btn-close btn-danger"
-                />
-              </div>
-            </div>
-          ))}
+      { Object.keys(words).length > 0 ? <div className="container">
+        <div className="mb-1 table-responsive">
+          <table className="table align-middle table-striped">
+            <thead>
+              <tr>
+                <td>Word</td>
+                <td>Translation</td>
+                <td>Rating</td>
+                <td className="text-end">Delete</td>
+              </tr>
+            </thead>
+            <tbody>
+              { Object.keys(words).length > 0 && (Object.entries(words)
+                .sort(([, a], [, b]) => b.priority - a.priority)
+                .map(([key, value]) => (
+                  <tr key={value.id ?? key}>
+                    <td>{value.originalText}</td>
+                    <td>{value.translatedText}</td>
+                    <td>{value.priority}</td>
+                    <td className="text-end">
+                      <button
+                        onClick={() => deleteTheWord(value.id ?? key)}
+                        className="btn btn-close btn-danger"
+                      />
+                    </td>
+                  </tr>
+                )))}
+            </tbody>
+          </table>
         </div>
 
         <div className="row">
@@ -44,7 +56,7 @@ function IndexPopup() {
             Settings
           </a>
         </div>
-      </div>
+      </div> : <div className="container"><p className="text"> You don't have added words yet</p></div>} 
     </div>
   )
 }
