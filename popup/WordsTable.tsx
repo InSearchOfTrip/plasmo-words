@@ -22,7 +22,7 @@ function WordsTable(props) {
       </div>
 
       <table
-        className={`table-striped. ${doShow ? "table" : "d-none"}`}>
+        className={`table table-striped ${doShow ? "table" : "d-none"}`}>
         <thead>
           <tr>
             <th>Original</th>
@@ -34,7 +34,7 @@ function WordsTable(props) {
 
         <tbody>
           {collectionWords.map((value, key) => (
-            <tr key={value.id ?? key}>
+            <tr key={value.id ?? key} className="align-middle">
               <td>{value.originalText}</td>
               <td>{value.translatedText}</td>
               <td className="text-center">{value.priority}</td>
