@@ -41,11 +41,9 @@ function IndexPopup() {
           <p className="text p-0"> You don't have added words yet</p>
         )}
       </div>
-      <div className="pe-2">
-        <a className="btn btn-primary w-100" href="options.html">
-          Settings
-        </a>
-      </div>
+      <a className="btn btn-primary w-100" href="options.html">
+        Settings
+      </a>
     </div>
   )
 }
