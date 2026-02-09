@@ -61,6 +61,7 @@ export default function SaveWord() {
     y: 0
   })
 
+
   const timeoutRef = useRef(null)
 
   function addTheWord() {
@@ -69,8 +70,8 @@ export default function SaveWord() {
   }
 
   function createCollection() {
-    addCollection(newCollectionName);
-    setShowAddCollection(false);
+    addCollection(newCollectionName)
+    setShowAddCollection(false)
   }
 
   useEffect(() => {
@@ -94,7 +95,8 @@ export default function SaveWord() {
       }
     }
 
-    document.addEventListener("dblclick", onDblClick)
+    document.addEventListener("dblclick", onDblClick);
+
     return () => {
       document.removeEventListener("dblclick", onDblClick)
       // Очистка при размонтировании
@@ -103,6 +105,11 @@ export default function SaveWord() {
       }
     }
   }, [])
+  useEffect(() => {
+     if(!collections){
+      addCollection("General");
+     }
+  }, [collections])
 
   if (!visible) return null
 
@@ -158,14 +165,15 @@ export default function SaveWord() {
               </button>
             </div>
           )}
-          { (showAddCollection && doSaveWords) && (
+          {showAddCollection && doSaveWords && (
             <div className="d-flex mb-3 align-items-stretch">
               <div className="flex-grow-1 pr-2px">
                 <input
-                  onChange={(e)=> setNewCollectionName(e.target.value)}
+                  onChange={(e) => setNewCollectionName(e.target.value)}
                   type="text"
                   className="form-control"
-                  placeholder="Name of the list" />
+                  placeholder="Name of the list"
+                />
               </div>
               <button className="btn btn-primary" onClick={createCollection}>
                 <b>Create</b>
@@ -176,7 +184,10 @@ export default function SaveWord() {
           {doSaveWords && (
             <div className="row">
               <div className="col">
-                <button className="btn btn-primary w-100"  disabled={showAddCollection} onClick={addTheWord}>
+                <button
+                  className="btn btn-primary w-100"
+                  disabled={showAddCollection}
+                  onClick={addTheWord}>
                   <b>Add word</b>
                 </button>
               </div>

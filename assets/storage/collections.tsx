@@ -26,17 +26,10 @@ export const KEYS = {
   COLLECTION_BY_DEFAULT: "collectionByDefault"
 } as const
 
-const id = crypto.randomUUID()
 export const DEFAULTS = {
   [KEYS.WORDS]: {},
-  [KEYS.COLLECTIONS]: {
-    [id]: {
-      id,
-      name: "General",
-      createdAt: Date.now()
-    }
-  },
-  [KEYS.COLLECTION_BY_DEFAULT]: id
+  [KEYS.COLLECTIONS]: {},
+  [KEYS.COLLECTION_BY_DEFAULT]: null
 }
 
 function useSyncedState(
@@ -131,16 +124,19 @@ export function useCollections() {
     DEFAULTS[KEYS.COLLECTION_BY_DEFAULT]
   )
   // Добавление новой коллекции
+
   function addCollection(name: string) {
     const newCollection: collection = {
       id: crypto.randomUUID(),
       name,
       createdAt: Date.now()
     }
-    setCollections({
-      ...collections,
+
+    setCollections((prev) => ({
+      ...(prev ?? {}),
       [newCollection.id]: newCollection
-    })
+    }))
+
     setCollectionByDefault(newCollection.id)
   }
 
