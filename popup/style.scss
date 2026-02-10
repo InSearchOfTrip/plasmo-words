@@ -12,5 +12,10 @@
 
 .pointer{
   cursor: pointer;
+  &:hover{
+    h4{
+      color: var(--bs-primary)!important;
+    }
+  }
 }
 

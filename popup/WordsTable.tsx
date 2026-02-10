@@ -11,7 +11,7 @@ function WordsTable(props) {
     deleteWord(id)
   }
   return (
-    <div className="mb-4">
+    <div className="mb-3 border border-dark border-top-0 border-start-0 border-end-0">
       <div
         className="d-flex justify-content-between align-items-center pointer"
         onClick={() => {
@@ -22,7 +22,7 @@ function WordsTable(props) {
       </div>
 
       <table
-        className={`table table-striped ${doShow ? "table" : "d-none"}`}>
+        className={`table table-striped mb-0 ${doShow ? "table" : "d-none"}`}>
         <thead>
           <tr>
             <th>Original</th>
