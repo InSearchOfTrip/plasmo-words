@@ -103,10 +103,28 @@ export function useWords() {
   }
 
   // Функция удаления слова по ID
-  function deleteWord(id: string) {
+  function deleteWord(id: string, collectId: string) {
     if (!(id in words)) return
-    const { [id]: _, ...rest } = words
-    setWords(rest)
+    console.log("some", words[id].collectionIds)
+    let word = {
+      ...words[id],
+      collectionIds: words[id].collectionIds.filter((el) => el != collectId)
+    }
+    if (word.collectionIds.length === 0) {
+      const { [id]: _, ...rest } = words
+      console.log("reset")
+      setWords(rest)
+    } else {
+      console.log("word", word)
+      console.log("words", {
+        ...words,
+        [word.id]: word
+      })
+       setWords({
+        ...words,
+        [word.id]: word
+      });
+    }
   }
 
   return { words, addWord, deleteWord }
@@ -133,7 +151,7 @@ export function useCollections() {
     }
 
     setCollections((prev) => {
-      console.log("SetCollection: prev is" , prev);
+      console.log("SetCollection: prev is", prev)
       if (
         Object.values(prev)?.some((el) => {
           return el?.name === name

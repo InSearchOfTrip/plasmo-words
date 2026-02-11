@@ -7,8 +7,8 @@ function WordsTable(props) {
   const [doShow, setDoShow] = useState(false)
   const { words, deleteWord } = useWords()
 
-  function deleteTheWord(id) {
-    deleteWord(id)
+  function deleteTheWord(id , collectionId) {
+    deleteWord(id , collectionId);
   }
   return (
     <div className="mb-3 border border-dark border-top-0 border-start-0 border-end-0">
@@ -40,7 +40,7 @@ function WordsTable(props) {
               <td className="text-center">{value.priority}</td>
               <td className="text-end">
                 <button
-                  onClick={() => deleteTheWord(value.id ?? String(key))}
+                  onClick={() => deleteTheWord(value.id , collection.id)}
                   className="btn btn-close btn-danger"
                 />
               </td>

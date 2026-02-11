@@ -14,9 +14,6 @@ function IndexPopup() {
   const { words, deleteWord } = useWords()
   const { collections } = useCollections()
 
-  function deleteTheWord(id) {
-    deleteWord(id)
-  }
   return (
     <div className="words p-2 shadow border-dark-subtle pr-0 bg-white">
       <div className="scroll">
