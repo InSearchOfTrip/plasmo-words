@@ -106,10 +106,10 @@ export default function SaveWord() {
     }
   }, [])
   useEffect(() => {
-     if(!collections){
+     if(Object.keys(collections).length === 0){
       addCollection("General");
      }
-  }, [collections])
+  }, [])
 
   if (!visible) return null
 
