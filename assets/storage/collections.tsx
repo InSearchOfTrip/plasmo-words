@@ -132,12 +132,22 @@ export function useCollections() {
       createdAt: Date.now()
     }
 
-    setCollections((prev) => ({
-      ...(prev ?? {}),
-      [newCollection.id]: newCollection
-    }))
-
-    setCollectionByDefault(newCollection.id)
+    setCollections((prev) => {
+      console.log("SetCollection: prev is" , prev);
+      if (
+        Object.values(prev)?.some((el) => {
+          return el?.name === name
+        })
+      ) {
+        return prev
+      } else {
+        setCollectionByDefault(newCollection.id)
+        return {
+          ...(prev ?? {}),
+          [newCollection.id]: newCollection
+        }
+      }
+    })
   }
 
   // Переименование существующей коллекции

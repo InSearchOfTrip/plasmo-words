@@ -61,7 +61,6 @@ export default function SaveWord() {
     y: 0
   })
 
-
   const timeoutRef = useRef(null)
 
   function addTheWord() {
@@ -95,7 +94,7 @@ export default function SaveWord() {
       }
     }
 
-    document.addEventListener("dblclick", onDblClick);
+    document.addEventListener("dblclick", onDblClick)
 
     return () => {
       document.removeEventListener("dblclick", onDblClick)
@@ -106,10 +105,14 @@ export default function SaveWord() {
     }
   }, [])
   useEffect(() => {
-     if(Object.keys(collections).length === 0){
-      addCollection("General");
-     }
-  }, [])
+    console.log("run")
+    setTimeout(() => {
+      if (Object.keys(collections).length === 0) {
+        console.log("Adding  'General' collections is: ", Object.keys(collections).length);
+        addCollection("General");
+      }
+    }, 500)
+  }, [collections])
 
   if (!visible) return null
 
