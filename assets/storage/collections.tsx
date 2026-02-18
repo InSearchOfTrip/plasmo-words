@@ -36,7 +36,7 @@ function useSyncedState(
   key: string,
   def: boolean | number | string | collections
 ) {
-  return useStorage<any>(key, def, { area: "sync" })
+  return useStorage<any>(key, def, { instance: storage })
 }
 
 export function useWords() {
@@ -137,6 +137,12 @@ export function useCollections() {
     KEYS.COLLECTIONS,
     DEFAULTS[KEYS.COLLECTIONS]
   )
+
+  async function getCollection(){
+    console.log("storage" , storage);
+    return storage.get('collections');
+  }
+
   const [collectionByDefault, setCollectionByDefault] = useSyncedState(
     KEYS.COLLECTION_BY_DEFAULT,
     DEFAULTS[KEYS.COLLECTION_BY_DEFAULT]
@@ -152,6 +158,7 @@ export function useCollections() {
 
     setCollections((prev) => {
       console.log("SetCollection: prev is", prev)
+      if (prev === undefined) return;
       if (
         Object.values(prev)?.some((el) => {
           return el?.name === name
@@ -186,6 +193,7 @@ export function useCollections() {
 
   return {
     collections,
+    getCollection,
     collectionByDefault,
     setCollectionByDefault,
     addCollection,

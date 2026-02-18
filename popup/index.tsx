@@ -17,7 +17,7 @@ function IndexPopup() {
   return (
     <div className="words p-2 shadow border-dark-subtle pr-0 bg-white">
       <div className="scroll">
-        <h2 className="fs-2 text-center">Words list</h2>
+        <h2 className="fs-2 text-center">FreqWords</h2>
         {Object.keys(words).length > 0 ? (
           Object.values(collections).map((collection) => {
             const collectionWords = Object.values(words).filter((word) =>

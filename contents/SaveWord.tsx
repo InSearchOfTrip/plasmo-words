@@ -47,6 +47,7 @@ export default function SaveWord() {
   const { words, addWord, deleteWord } = useWords()
   const {
     collections,
+    getCollection,
     collectionByDefault,
     setCollectionByDefault,
     addCollection
@@ -104,15 +105,18 @@ export default function SaveWord() {
       }
     }
   }, [])
-  useEffect(() => {
+  useEffect( function () {
     console.log("run")
-    setTimeout(() => {
-      if (Object.keys(collections).length === 0) {
-        console.log("Adding  'General' collections is: ", Object.keys(collections).length);
-        addCollection("General");
-      }
-    }, 500)
+    getCollection().then((res) =>{
+       console.log(res);
+       console.log(res === undefined || Object.keys(res ? res : {} ).length === 0);
+       if (res === undefined || Object.keys(res ? res : {} ).length === 0) {
+      addCollection("General");
+    }
+    });
+
   }, [collections])
+
 
   if (!visible) return null
 

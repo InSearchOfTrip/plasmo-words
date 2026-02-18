@@ -2,8 +2,8 @@
   width: 500px;
 }
 .scroll{
-  max-height: 400;
-  overflow: scroll;
+  max-height: 540px;
+  overflow: auto;
   padding-right: 0.8rem;
 }
 .pr-0{
@@ -19,3 +19,17 @@
   }
 }
 
+.editSVG{
+  
+}
+
+.border-0 {
+  border: 0!important;
+}
+.outline-0 {
+  outline: 0!important;
+}
+
+.caret-color-primary {
+  caret-color: var(--bs-primary)!important;
+}
