@@ -70,7 +70,7 @@ function Settings() {
         </div>
       </div>
 
-      <div className="row mb-1">
+      {/* <div className="row mb-1">
         <div className="container">
           <div className="form-check form-switch">
             <label className="form-check-label pt-1" htmlFor="autoAdd">
@@ -143,7 +143,7 @@ function Settings() {
             <option value={3}>Ger</option>
           </select>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -79,9 +79,9 @@ export default function SaveWord() {
       const selectedText = window.getSelection()?.toString().trim()
       if (!selectedText) return
 
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
+      // if (timeoutRef.current) {
+      //   clearTimeout(timeoutRef.current)
+      // }
 
       setPosition({ x: e.pageX, y: e.pageY })
       setText(uppercase(selectedText))
@@ -98,13 +98,20 @@ export default function SaveWord() {
     document.addEventListener("dblclick", onDblClick)
 
     return () => {
+      setText("");
+      setTranslationText("");
       document.removeEventListener("dblclick", onDblClick)
       // Очистка при размонтировании
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
+      // if (timeoutRef.current) {
+      //   clearTimeout(timeoutRef.current)
+      // }
     }
   }, [])
+
+  useEffect(() => {
+    setTranslationText("")
+  }, [text])
+
   useEffect( function () {
     console.log("run")
     getCollection().then((res) =>{
