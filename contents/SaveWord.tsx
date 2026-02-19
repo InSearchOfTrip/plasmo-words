@@ -124,7 +124,6 @@ export default function SaveWord() {
 
   useEffect(
     function () {
-      console.log("run")
       getCollection().then((res) => {
         if (res === undefined || Object.keys(res ? res : {}).length === 0) {
           addCollection("General")
