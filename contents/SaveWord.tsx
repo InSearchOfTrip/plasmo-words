@@ -28,6 +28,14 @@ function uppercase(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+const LANGUAGES = [
+  { code: "en", label: "EN" },
+  { code: "uk", label: "UA" },
+  { code: "de", label: "DE" },
+  { code: "fr", label: "FR" },
+  { code: "hi", label: "HI" }
+]
+
 export default function SaveWord() {
   const {
     doSaveWords,
@@ -94,9 +102,6 @@ export default function SaveWord() {
       //     setVisible(false)
       // }, 10000);
 
-      if (doTranslation) {
-        translateTheWord(selectedText)
-      }
     }
 
     document.addEventListener("dblclick", onDblClick)
@@ -154,20 +159,18 @@ export default function SaveWord() {
                       style={{ width: "auto" }}
                       value={translateFrom}
                       onChange={(e) => setTranslateFrom(e.target.value)}>
-                      <option value="en">EN</option>
-                      <option value="uk">UA</option>
-                      <option value="de">DE</option>
-                      <option value="fr">FR</option>
+                      {LANGUAGES.map(lang => (
+                        <option key={lang.code} value={lang.code}>{lang.label}</option>
+                      ))}
                     </select>
                     <select
                       className="form-select form-select-sm"
                       style={{ width: "auto" }}
                       value={translateTo}
                       onChange={(e) => setTranslateTo(e.target.value)}>
-                      <option value="en">EN</option>
-                      <option value="uk">UA</option>
-                      <option value="de">DE</option>
-                      <option value="fr">FR</option>
+                      {LANGUAGES.map(lang => (
+                        <option key={lang.code} value={lang.code}>{lang.label}</option>
+                      ))}
                     </select>
                   </div>
                 )}
