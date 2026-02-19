@@ -30,9 +30,9 @@ function uppercase(str) {
 
 const LANGUAGES = [
   { code: "en", label: "EN" },
-  { code: "uk", label: "UA" },
   { code: "de", label: "DE" },
   { code: "fr", label: "FR" },
+  { code: "uk", label: "UA" },
   { code: "hi", label: "HI" }
 ]
 
@@ -118,6 +118,8 @@ export default function SaveWord() {
   }, [])
 
   useEffect(() => {
+    if (text.length  === 0) return;
+
     setTranslationText("");
     translateTheWord(text);
   }, [text, translateFrom, translateTo , doTranslation]);
