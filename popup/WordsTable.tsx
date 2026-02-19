@@ -1,5 +1,5 @@
 // import editSVG from "data-base64:~assets/icons/pen-fill.svg"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import EditSVG from "react:~assets/icons/pen-fill.svg"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +15,12 @@ function WordsTable(props) {
   const { words, deleteWord } = useWords()
   const { renameCollection } = useCollections()
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (doEdit) {
+      inputRef.current?.focus();
+    }
+  }, [doEdit]);
 
   function deleteTheWord(id, collectionId) {
     deleteWord(id, collectionId)
@@ -52,13 +58,6 @@ function WordsTable(props) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-
-              if(!doEdit){
-                console.log("inputRef.current", inputRef.current)
-                setTimeout(() => {inputRef.current?.focus();
-                }, 300);
-              }
-
               setDoEdit(!doEdit);
             }}
             className={`btn border-0 outline-0`}>
