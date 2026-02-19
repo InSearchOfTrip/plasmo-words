@@ -24,13 +24,13 @@ function IndexPopup() {
               word.collectionIds.includes(collection.id)
             )
 
-            if (collectionWords.length === 0) return null
-
+            if (collectionWords.length === 0) return 
+            const sortedCollectionWords = collectionWords.sort( (a, b) => b.priority - a.priority);
             return (
               <WordsTable
-                key="collection.id"
+                key={collection.id}
                 collection={collection}
-                collectionWords={collectionWords}
+                collectionWords={sortedCollectionWords}
               />
             )
           })

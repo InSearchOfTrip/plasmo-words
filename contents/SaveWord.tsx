@@ -121,10 +121,6 @@ export default function SaveWord() {
     function () {
       console.log("run")
       getCollection().then((res) => {
-        console.log(res)
-        console.log(
-          res === undefined || Object.keys(res ? res : {}).length === 0
-        )
         if (res === undefined || Object.keys(res ? res : {}).length === 0) {
           addCollection("General")
         }
