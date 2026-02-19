@@ -72,7 +72,7 @@ function WordsTable(props) {
               e.stopPropagation();
               setDoEdit(!doEdit);
             }}
-            className={`btn border-0 outline-0`}>
+            className={`btn border-0 outline-0 p-1`}>
               <FontAwesomeIcon icon={faPen} className={`edit-btn__icon ${doEdit ? "primary" : ""}`} />
           </button>
         </div>
