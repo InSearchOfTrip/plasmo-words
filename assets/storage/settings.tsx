@@ -18,8 +18,8 @@ export const DEFAULTS = {
   [KEYS.TRANSLATION]: true,
   [KEYS.AUTO_ADD]: false,
   [KEYS.DEFAULT_GROUP]: 0,
-  [KEYS.TRANSLATE_FROM]: "eng",
-  [KEYS.TRANSLATE_TO]: "ru"
+  [KEYS.TRANSLATE_FROM]: "en",
+  [KEYS.TRANSLATE_TO]: "ua"
 }
 
 // React hook wrapper

@@ -73,6 +73,10 @@ export default function SaveWord() {
     addCollection(newCollectionName)
     setShowAddCollection(false)
   }
+  async function translateTheWord(word) {
+    const translated = await fetchTranslation(word , translateFrom, translateTo);
+    setTranslationText(translated)
+  }
 
   useEffect(() => {
     const onDblClick = async (e: MouseEvent) => {
@@ -91,15 +95,15 @@ export default function SaveWord() {
       // }, 10000);
 
       if (doTranslation) {
-        setTranslationText(uppercase(await fetchTranslation(selectedText)))
+        translateTheWord(selectedText)
       }
     }
 
     document.addEventListener("dblclick", onDblClick)
 
     return () => {
-      setText("");
-      setTranslationText("");
+      setText("")
+      setTranslationText("")
       document.removeEventListener("dblclick", onDblClick)
       // Очистка при размонтировании
       // if (timeoutRef.current) {
@@ -109,21 +113,25 @@ export default function SaveWord() {
   }, [])
 
   useEffect(() => {
-    setTranslationText("")
-  }, [text])
+    setTranslationText("");
+    translateTheWord(text);
+  }, [text, translateFrom, translateTo , doTranslation]);
 
-  useEffect( function () {
-    console.log("run")
-    getCollection().then((res) =>{
-       console.log(res);
-       console.log(res === undefined || Object.keys(res ? res : {} ).length === 0);
-       if (res === undefined || Object.keys(res ? res : {} ).length === 0) {
-      addCollection("General");
-    }
-    });
-
-  }, [collections])
-
+  useEffect(
+    function () {
+      console.log("run")
+      getCollection().then((res) => {
+        console.log(res)
+        console.log(
+          res === undefined || Object.keys(res ? res : {}).length === 0
+        )
+        if (res === undefined || Object.keys(res ? res : {}).length === 0) {
+          addCollection("General")
+        }
+      })
+    },
+    [collections]
+  )
 
   if (!visible) return null
 
@@ -136,16 +144,42 @@ export default function SaveWord() {
           top: position.y,
           left: position.x,
           zIndex: 999999,
-          width: "300px"
-        }}>
+          width: "400px"
+        }} onDoubleClick={(e) => e.stopPropagation()}>
         <div className="rounded-3 border container shadow border-dark-subtle p-2 bg-white">
           <div className="row mb-3">
-            <div className="d-flex justify-content-end">
-              <h3 className="fs-5 me-auto">{text}</h3>
-              <button
-                onClick={() => setVisible(false)}
-                className="btn btn-close"
-              />
+            <div className="d-flex justify-content-between align-items-center">
+              <h3 className="fs-5">{text}</h3>
+              <div className="d-flex justify-content-between align-items-center ">
+                {doTranslation && (
+                  <div className="d-flex gap-2 pr-4px">
+                    <select
+                      className="form-select form-select-sm"
+                      style={{ width: "auto" }}
+                      value={translateFrom}
+                      onChange={(e) => setTranslateFrom(e.target.value)}>
+                      <option value="en">EN</option>
+                      <option value="uk">UA</option>
+                      <option value="de">DE</option>
+                      <option value="fr">FR</option>
+                    </select>
+                    <select
+                      className="form-select form-select-sm"
+                      style={{ width: "auto" }}
+                      value={translateTo}
+                      onChange={(e) => setTranslateTo(e.target.value)}>
+                      <option value="en">EN</option>
+                      <option value="uk">UA</option>
+                      <option value="de">DE</option>
+                      <option value="fr">FR</option>
+                    </select>
+                  </div>
+                )}
+                <button
+                  onClick={() => setVisible(false)}
+                  className="btn btn-close"
+                />
+              </div>
             </div>
           </div>
 
