@@ -2,6 +2,10 @@
 import { useRef, useState } from "react"
 import EditSVG from "react:~assets/icons/pen-fill.svg"
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+
+
 import { useCollections, useWords } from "../assets/storage/collections"
 
 function WordsTable(props) {
@@ -50,17 +54,15 @@ function WordsTable(props) {
               e.stopPropagation();
 
               if(!doEdit){
-              console.log("inputRef.current", inputRef.current)
+                console.log("inputRef.current", inputRef.current)
                 setTimeout(() => {inputRef.current?.focus();
                 }, 300);
               }
 
               setDoEdit(!doEdit);
             }}
-            className={`btn btn-sm ${doEdit ? "btn-close": "btn-primary"}`}
-            style={{ transform: "scale(0.8)" }}>
-            {doEdit ? null : <EditSVG className="edit" />}
-            
+            className={`btn border-0 outline-0`}>
+              <FontAwesomeIcon icon={faPen} className={`edit-btn__icon ${doEdit ? "primary" : ""}`} />
           </button>
         </div>
 

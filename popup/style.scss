@@ -33,3 +33,9 @@
 .caret-color-primary {
   caret-color: var(--bs-primary)!important;
 }
+
+.primary {
+  *{
+    fill: var(--bs-primary);
+  }
+}
