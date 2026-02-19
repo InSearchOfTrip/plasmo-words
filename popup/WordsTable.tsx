@@ -15,12 +15,20 @@ function WordsTable(props) {
   const { words, deleteWord } = useWords()
   const { renameCollection } = useCollections()
   const inputRef = useRef<HTMLInputElement>(null);
+  const h4Ref = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (doEdit) {
       inputRef.current?.focus();
     }
   }, [doEdit]);
+
+  useEffect(() => {
+    if (h4Ref.current && inputRef.current) {
+      const h4Width = h4Ref.current.offsetWidth;
+      inputRef.current.style.width = h4Width + 'px';
+    }
+  }, [collection.name , doEdit]);
 
   function deleteTheWord(id, collectionId) {
     deleteWord(id, collectionId)
@@ -40,7 +48,7 @@ function WordsTable(props) {
           setDoShow(!doShow)
         }}>
         <div className="d-flex align-items-center gap-2">
-          {doEdit ? (
+          {doEdit && (
             <input
               className="fs-4 m-0 p-0 border-0 outline-0 caret-color-primary"
               type="text"
@@ -48,12 +56,16 @@ function WordsTable(props) {
               onClick={(e) => e.stopPropagation()}
               onChange={(e) => renameCollection(collection.id, e.target.value)}
               onKeyDown={keyDown}
-              size={collection.name.length}
               ref={inputRef}
             />
-          ) : (
-            <h4 className="fs-4 m-0">{collection.name}</h4>
           )}
+          <h4 
+            ref={h4Ref}
+            className="fs-4 m-0"
+            style={doEdit ? { visibility: 'hidden', position: 'absolute' } : undefined}
+          >
+            {collection.name}
+          </h4>
 
           <button
             onClick={(e) => {
