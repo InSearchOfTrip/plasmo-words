@@ -41,9 +41,9 @@ function WordsTable(props) {
   }
 
   return (
-    <div className="mb-3 border border-dark border-top-0 border-start-0 border-end-0">
+    <div className="mb-3 pb-1">
       <div
-        className="d-flex justify-content-between align-items-center pointer"
+        className="d-flex justify-content-between align-items-center pointer animated-border-bottom"
         onClick={() => {
           setDoShow(!doShow)
         }}>

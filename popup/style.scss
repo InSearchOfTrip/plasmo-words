@@ -9,14 +9,12 @@
 .pr-0{
   padding-right: 0!important;
 }
+.pb-1{
+  padding-bottom: 1rem!important;
+}
 
 .pointer{
   cursor: pointer;
-  &:hover{
-    h4{
-      color: var(--bs-primary)!important;
-    }
-  }
 }
 
 .editSVG{
@@ -38,5 +36,48 @@
 .primary {
   *{
     fill: var(--bs-primary);
+  }
+}
+
+.btn{
+  &:hover{
+    *{
+      fill: var(--bs-primary);
+    }
+  }
+}
+
+// Анимированная полоска с синей заливкой от центра
+.animated-border-bottom {
+  position: relative;
+  border-bottom: 2px solid rgba(var(--bs-dark-rgb));
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    height: 2px;
+    background-color: var(--bs-primary);
+    width: 0;
+    transition: width 0.6s ease-in-out;
+  }
+  
+  // Левая половина (от центра влево)
+  &::before {
+    right: 50%;
+  }
+  
+  // Правая половина (от центра вправо)
+  &::after {
+    left: 50%;
+  }
+  
+  // Анимация при наведении
+  &:hover {
+    &::before,
+    &::after {
+      width: 50%;
+    }
   }
 }
