@@ -19,7 +19,7 @@ export const DEFAULTS = {
   [KEYS.AUTO_ADD]: false,
   [KEYS.DEFAULT_GROUP]: 0,
   [KEYS.TRANSLATE_FROM]: "en",
-  [KEYS.TRANSLATE_TO]: "ua"
+  [KEYS.TRANSLATE_TO]: "uk"
 }
 
 // React hook wrapper

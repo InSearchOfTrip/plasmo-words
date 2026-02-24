@@ -158,7 +158,7 @@ export default function SaveWord() {
                     <select
                       className="form-select form-select-sm"
                       style={{ width: "auto" }}
-                      value={translateFrom}
+                      value={translateFrom ?? "en"}
                       onChange={(e) => setTranslateFrom(e.target.value)}>
                       {LANGUAGES.map(lang => (
                         <option key={lang.code} value={lang.code}>{lang.label}</option>
@@ -167,7 +167,7 @@ export default function SaveWord() {
                     <select
                       className="form-select form-select-sm"
                       style={{ width: "auto" }}
-                      value={translateTo}
+                      value={translateTo ?? "uk"}
                       onChange={(e) => setTranslateTo(e.target.value)}>
                       {LANGUAGES.map(lang => (
                         <option key={lang.code} value={lang.code}>{lang.label}</option>
