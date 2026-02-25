@@ -138,7 +138,7 @@ export default function SaveWord() {
   if (!visible) return null
 
   return (
-    doSaveWords | doTranslation && (
+    (doSaveWords || doTranslation) && (
       <div
         className="p-3 bg-transparent"
         style={{
