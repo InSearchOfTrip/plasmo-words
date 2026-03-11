@@ -200,7 +200,7 @@ export default function SaveWord() {
             </div>
           </div>
 
-          {doTranslation && (
+          {(doTranslation && translation ) && (
             <div className="row">
               {/* <div className="container"> */}
               <div className="d-flex align-items-center">
