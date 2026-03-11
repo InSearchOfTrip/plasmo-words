@@ -169,7 +169,7 @@ export default function SaveWord() {
                       style={{ width: "auto" }}
                       value={translateTo ?? "uk"}
                       onChange={(e) => setTranslateTo(e.target.value)}>
-                      {LANGUAGES.map(lang => (
+                      {LANGUAGES.filter(lang => lang.code !== translateFrom).map(lang => (
                         <option key={lang.code} value={lang.code}>{lang.label}</option>
                       ))}
                     </select>
