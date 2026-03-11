@@ -1,12 +1,14 @@
 // import editSVG from "data-base64:~assets/icons/pen-fill.svg"
 import { useRef, useState, useEffect } from "react"
 import EditSVG from "react:~assets/icons/pen-fill.svg"
+import Speak from "react:~assets/icons/volume-down-fill.svg"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 
 import { useCollections, useWords } from "../assets/storage/collections"
+import { speakWord } from "../assets/helpers/speech"
 
 function WordsTable(props) {
   const { collection, collectionWords } = props
@@ -94,8 +96,24 @@ function WordsTable(props) {
         <tbody>
           {collectionWords.map((value, key) => (
             <tr key={value.id ?? key} className="align-middle">
-              <td>{value.originalText}</td>
-              <td>{value.translatedText}</td>
+              <td>
+                <div className="d-flex align-items-center gap-2">
+                  {value.originalText}
+                  <Speak 
+                    onClick={() => speakWord(value.originalText)} 
+                    style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="d-flex align-items-center gap-2">
+                  {value.translatedText}
+                  <Speak 
+                    onClick={() => speakWord(value.translatedText)} 
+                    style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
+                  />
+                </div>
+              </td>
               <td className="text-center">{value.priority}</td>
               <td className="text-end">
                 <button

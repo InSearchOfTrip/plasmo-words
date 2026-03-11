@@ -1,9 +1,15 @@
-.add_icon {
+.addIcon {
   fill: var(--bs-primary);
   stroke: var(--bs-white);
   width: 38px;
   height: 38px;
   stroke-width: 0;
+}
+.speakIcon {
+  fill: var(--bs-primary);
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }
 .pr-2px {
   padding-right: 2px;

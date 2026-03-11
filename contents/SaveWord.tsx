@@ -6,8 +6,10 @@ import { useEffect, useRef, useState } from "react"
 // import "./style.scss"
 
 import Plus from "react:~assets/icons/plus-square-fill.svg"
+import Speak from "react:~assets/icons/volume-down-fill.svg"
 
 import { fetchTranslation } from "~assets/helpers/translation"
+import { speakWord } from "~assets/helpers/speech"
 
 import { useCollections, useWords } from "../assets/storage/collections"
 import { useSettings } from "../assets/storage/settings"
@@ -82,7 +84,7 @@ export default function SaveWord() {
     setShowAddCollection(false)
   }
   async function translateTheWord(word) {
-    const translated = await fetchTranslation(word , translateFrom, translateTo);
+    const translated = await fetchTranslation(word, translateFrom, translateTo)
     setTranslationText(translated)
   }
 
@@ -101,7 +103,6 @@ export default function SaveWord() {
       // timeoutRef.current = setTimeout(() => {
       //     setVisible(false)
       // }, 10000);
-
     }
 
     document.addEventListener("dblclick", onDblClick)
@@ -118,11 +119,11 @@ export default function SaveWord() {
   }, [])
 
   useEffect(() => {
-    if (text.length  === 0) return;
+    if (text.length === 0) return
 
-    setTranslationText("");
-    translateTheWord(text);
-  }, [text, translateFrom, translateTo , doTranslation]);
+    setTranslationText("")
+    translateTheWord(text)
+  }, [text, translateFrom, translateTo, doTranslation])
 
   useEffect(
     function () {
@@ -147,11 +148,21 @@ export default function SaveWord() {
           left: position.x,
           zIndex: 999999,
           width: "400px"
-        }} onDoubleClick={(e) => e.stopPropagation()}>
+        }}
+        onDoubleClick={(e) => e.stopPropagation()}>
         <div className="rounded-3 border container shadow border-dark-subtle p-2 bg-white">
           <div className="row mb-3">
             <div className="d-flex justify-content-between align-items-center">
-              <h3 className="fs-5">{text}</h3>
+              <div className="d-flex align-items-center">
+                <h3 className="fs-5 m-0">{text}</h3>
+                <Speak 
+                  className="speakIcon" 
+                  onClick={(e) => {
+                    speakWord(text, translateFrom);
+                  }} 
+                  style={{ cursor: 'pointer' }} 
+                />
+              </div>
               <div className="d-flex justify-content-between align-items-center ">
                 {doTranslation && (
                   <div className="d-flex gap-2 pr-4px">
@@ -160,8 +171,10 @@ export default function SaveWord() {
                       style={{ width: "auto" }}
                       value={translateFrom ?? "en"}
                       onChange={(e) => setTranslateFrom(e.target.value)}>
-                      {LANGUAGES.map(lang => (
-                        <option key={lang.code} value={lang.code}>{lang.label}</option>
+                      {LANGUAGES.map((lang) => (
+                        <option key={lang.code} value={lang.code}>
+                          {lang.label}
+                        </option>
                       ))}
                     </select>
                     <select
@@ -169,8 +182,12 @@ export default function SaveWord() {
                       style={{ width: "auto" }}
                       value={translateTo ?? "uk"}
                       onChange={(e) => setTranslateTo(e.target.value)}>
-                      {LANGUAGES.filter(lang => lang.code !== translateFrom).map(lang => (
-                        <option key={lang.code} value={lang.code}>{lang.label}</option>
+                      {LANGUAGES.filter(
+                        (lang) => lang.code !== translateFrom
+                      ).map((lang) => (
+                        <option key={lang.code} value={lang.code}>
+                          {lang.label}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -186,7 +203,16 @@ export default function SaveWord() {
           {doTranslation && (
             <div className="row">
               {/* <div className="container"> */}
-              <p className="fs-5">{translation}</p>
+              <div className="d-flex align-items-center">
+                <p className="fs-5 m-0">{translation}</p>
+                <Speak 
+                  className="speakIcon" 
+                  onClick={(e) => {
+                    speakWord(translation, translateTo);
+                  }} 
+                  style={{ cursor: 'pointer' }} 
+                />
+              </div>
             </div>
             // </div>
           )}
@@ -209,7 +235,7 @@ export default function SaveWord() {
               <button
                 className="btn p-0"
                 onClick={() => setShowAddCollection(!showAddCollection)}>
-                <Plus className="add_icon" />
+                <Plus className="addIcon" />
               </button>
             </div>
           )}
