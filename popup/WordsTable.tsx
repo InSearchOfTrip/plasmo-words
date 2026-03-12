@@ -9,13 +9,15 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 import { useCollections, useWords } from "../assets/storage/collections"
 import { speakWord } from "../assets/helpers/speech"
+import { useSettings } from "~assets/storage/settings";
 
 function WordsTable(props) {
-  const { collection, collectionWords } = props
-  const [doShow, setDoShow] = useState(false)
-  const [doEdit, setDoEdit] = useState(false)
-  const { words, deleteWord } = useWords()
-  const { renameCollection } = useCollections()
+  const { translateFrom,translateTo} = useSettings();
+  const { collection, collectionWords } = props;
+  const [doShow, setDoShow] = useState(false);
+  const [doEdit, setDoEdit] = useState(false);
+  const { words, deleteWord } = useWords();
+  const { renameCollection } = useCollections();
   const inputRef = useRef<HTMLInputElement>(null);
   const h4Ref = useRef<HTMLHeadingElement>(null);
 

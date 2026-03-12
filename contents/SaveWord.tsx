@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react"
 import Plus from "react:~assets/icons/plus-square-fill.svg"
 import Speak from "react:~assets/icons/volume-down-fill.svg"
 
-import { fetchTranslation } from "~assets/helpers/translation"
+import { fetchTranslation, LANGUAGES } from "~assets/helpers/translation"
 import { speakWord } from "~assets/helpers/speech"
 
 import { useCollections, useWords } from "../assets/storage/collections"
@@ -29,14 +29,6 @@ export const config: PlasmoCSConfig = {
 function uppercase(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
-
-const LANGUAGES = [
-  { code: "en", label: "EN" },
-  { code: "de", label: "DE" },
-  { code: "fr", label: "FR" },
-  { code: "uk", label: "UA" },
-  { code: "hi", label: "HI" }
-]
 
 export default function SaveWord() {
   const {
