@@ -67,7 +67,7 @@ export default function SaveWord() {
   const timeoutRef = useRef(null)
 
   function addTheWord() {
-    addWord(text, translation, collectionByDefault)
+    addWord(text, translateFrom, translation, translateTo, collectionByDefault)
     setVisible(false)
   }
 

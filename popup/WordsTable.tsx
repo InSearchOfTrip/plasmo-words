@@ -102,7 +102,7 @@ function WordsTable(props) {
                 <div className="d-flex align-items-center gap-2">
                   {value.originalText}
                   <Speak 
-                    onClick={() => speakWord(value.originalText)} 
+                    onClick={() => speakWord(value.originalText, value.originalLanguage)} 
                     style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
                   />
                 </div>
@@ -111,7 +111,7 @@ function WordsTable(props) {
                 <div className="d-flex align-items-center gap-2">
                   {value.translatedText}
                   <Speak 
-                    onClick={() => speakWord(value.translatedText)} 
+                    onClick={() => speakWord(value.translatedText , value.translatedLanguage)} 
                     style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
                   />
                 </div>

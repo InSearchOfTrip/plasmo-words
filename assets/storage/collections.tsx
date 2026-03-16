@@ -5,8 +5,10 @@ export const storage = new Storage({ area: "sync" });
 
 type word = {
   id: string
-  originalText: string
+  originalText: string,
+  originalLanguage: string,
   translatedText: string
+  translatedLanguage: string
   collectionIds: string[]
   priority: number
   createdAt: number; // new Date().toISOString()
@@ -50,7 +52,9 @@ export function useWords() {
   // Функция добавления нового слова
   function addWord(
     originalText: string,
+    originalLanguage: string,
     translatedText: string,
+    translatedLanguage: string,
     collectionId: string | null
   ) {
     setWords((prevWords) => {
@@ -93,7 +97,9 @@ export function useWords() {
       const newWord: word = {
         id: crypto.randomUUID(),
         originalText,
+        originalLanguage,
         translatedText,
+        translatedLanguage,
         collectionIds: collectionId ? [collectionId] : [],
         priority: 1,
         createdAt: Date.now()
