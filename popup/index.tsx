@@ -38,9 +38,14 @@ function IndexPopup() {
           <p className="text p-0"> You don't have added words yet</p>
         )}
       </div>
-      <a className="btn btn-primary w-100" href="options.html">
-        Settings
-      </a>
+      <div className="d-flex gap-2">
+        <a className="btn btn-primary flex-fill" href="options.html">
+          Settings
+        </a>
+        <a className="btn btn-secondary flex-fill" href="tabs/learn.html" target="_blank">
+          LearnGround
+        </a>
+      </div>
     </div>
   )
 }
