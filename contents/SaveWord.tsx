@@ -252,7 +252,7 @@ export default function SaveWord() {
               <div className="col">
                 <button
                   className="btn btn-primary w-100"
-                  disabled={showAddCollection}
+                  disabled={showAddCollection || !translation}
                   onClick={addTheWord}>
                   <b>Add word</b>
                 </button>
