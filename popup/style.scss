@@ -45,7 +45,11 @@
       fill: var(--bs-primary);
     }
   }
+  &_order{
+    line-height: 0.1!important;
+  }
 }
+
 
 // Анимированная полоска с синей заливкой от центра
 .animated-border-bottom {

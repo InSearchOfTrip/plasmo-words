@@ -2,6 +2,8 @@
 import { useRef, useState, useEffect } from "react"
 import EditSVG from "react:~assets/icons/pen-fill.svg"
 import Speak from "react:~assets/icons/volume-down-fill.svg"
+import CaretUp from "react:~assets/icons/caret-up-fill.svg"
+import CaretDown from "react:~assets/icons/caret-down-fill.svg"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +19,7 @@ function WordsTable(props) {
   const [doShow, setDoShow] = useState(false);
   const [doEdit, setDoEdit] = useState(false);
   const { words, deleteWord } = useWords();
-  const { renameCollection } = useCollections();
+  const { renameCollection, changeCollectionOrder } = useCollections();
   const inputRef = useRef<HTMLInputElement>(null);
   const h4Ref = useRef<HTMLHeadingElement>(null);
 
@@ -81,7 +83,31 @@ function WordsTable(props) {
           </button>
         </div>
 
-        <p className="text m-0">{collectionWords.length} words</p>
+        <div className="d-flex align-items-center gap-2">
+          <p className="text m-0">{collectionWords.length} words</p>
+          
+          <div className="d-flex flex-column">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                changeCollectionOrder(collection.id, 'up');
+              }}
+              className="btn btn_order border-0 outline-0 p-0"
+              title="Move up">
+                <CaretUp className="edit-btn__icon" />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                changeCollectionOrder(collection.id, 'down');
+              }}
+              className="btn btn_order border-0 outline-0 p-0"
+              title="Move down">
+                <CaretDown className="edit-btn__icon" />
+            </button>
+          </div>
+        </div>
       </div>
 
       <table

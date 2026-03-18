@@ -17,6 +17,7 @@ type word = {
 type collection = {
   id: string
   name: string
+  order: number,
   createdAt: number; // new Date().toISOString()
 };
 
@@ -153,27 +154,36 @@ export function useCollections() {
   // Добавление новой коллекции
 
   function addCollection(name: string) {
-    const newCollection: collection = {
-      id: crypto.randomUUID(),
-      name,
-      createdAt: Date.now()
-    };
-
     setCollections((prev) => {
       if (prev === undefined) return;
+      
+      // Проверяем, есть ли уже коллекция с таким именем
       if (
         Object.values(prev).some((el) => {
           return (el as collection).name === name;
         })
       ) {
         return prev;
-      } else {
-        setCollectionByDefault(newCollection.id);
-        return {
-          ...(prev ?? {}),
-          [newCollection.id]: newCollection
-        };
       }
+      
+      // Находим максимальный order среди существующих коллекций
+      const maxOrder = Object.values(prev).reduce((max, col) => {
+        const collection = col as collection;
+        return collection.order > max ? collection.order : max;
+      }, -1); // Начинаем с -1, чтобы первая коллекция получила order = 0
+      
+      const newCollection: collection = {
+        id: crypto.randomUUID(),
+        name,
+        order: maxOrder + 1,
+        createdAt: Date.now()
+      };
+      
+      setCollectionByDefault(newCollection.id);
+      return {
+        ...(prev ?? {}),
+        [newCollection.id]: newCollection
+      };
     });
   }
 
@@ -183,6 +193,36 @@ export function useCollections() {
     setCollections({
       ...collections,
       [id]: { ...collections[id], name: newName }
+    });
+  }
+
+  // Изменение порядка коллекции (вверх или вниз)
+  function changeCollectionOrder(id: string, direction: 'up' | 'down') {
+    if (!collections[id]) return;
+    
+    setCollections((prev) => {
+      if (!prev) return prev;
+      
+      const currentCollection = prev[id];
+      const currentOrder = currentCollection.order;
+      const newOrder = direction === 'up' ? currentOrder - 1 : currentOrder + 1;
+      
+      // Находим коллекцию, с которой нужно поменяться местами
+      const swapCollectionEntry = Object.entries(prev).find(
+        ([_, col]) => (col as collection).order === newOrder
+      );
+      
+      // Если такой коллекции нет (достигли границы), ничего не делаем
+      if (!swapCollectionEntry) return prev;
+      
+      const [swapId, swapCollection] = swapCollectionEntry as [string, collection];
+      
+      // Меняем order местами
+      return {
+        ...prev,
+        [id]: { ...currentCollection, order: newOrder },
+        [swapId]: { ...swapCollection, order: currentOrder }
+      };
     });
   }
 
@@ -200,6 +240,7 @@ export function useCollections() {
     setCollectionByDefault,
     addCollection,
     renameCollection,
+    changeCollectionOrder,
     deleteCollection
   };
 }
