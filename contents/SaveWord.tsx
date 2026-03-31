@@ -76,8 +76,8 @@ export default function SaveWord() {
     setShowAddCollection(false)
   }
   async function translateTheWord(word) {
-    const translated = await fetchTranslation(word, translateFrom, translateTo)
-    setTranslationText(translated)
+    const translated = await fetchTranslation(word, translateFrom, translateTo);
+    setTranslationText(uppercase(translated));
   }
 
   useEffect(() => {

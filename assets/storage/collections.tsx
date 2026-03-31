@@ -4,20 +4,22 @@ import { useStorage } from "@plasmohq/storage/hook";
 export const storage = new Storage({ area: "sync" });
 
 type word = {
-  id: string
-  originalText: string,
-  originalLanguage: string,
-  translatedText: string
-  translatedLanguage: string
-  collectionIds: string[]
-  priority: number
+  id: string;
+  originalText: string;
+  originalLanguage: string;
+  translatedText: string;
+  translatedLanguage: string;
+  collectionIds: string[];
+  priority: number;
   createdAt: number; // new Date().toISOString()
+  good_streak: number;
+  level:  'low' | 'medium' | 'high';
 };
 
 type collection = {
-  id: string
-  name: string
-  order: number,
+  id: string;
+  name: string;
+  order: number;
   createdAt: number; // new Date().toISOString()
 };
 
@@ -56,7 +58,8 @@ export function useWords() {
     originalLanguage: string,
     translatedText: string,
     translatedLanguage: string,
-    collectionId: string | null
+    collectionId: string | null,
+    
   ) {
     setWords((prevWords) => {
       const existingEntry = Object.entries(prevWords || {}).find(
@@ -103,7 +106,9 @@ export function useWords() {
         translatedLanguage,
         collectionIds: collectionId ? [collectionId] : [],
         priority: 1,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        good_streak: 0,
+        level: 'low'
       };
 
       return {
