@@ -82,7 +82,34 @@ export default function SaveWord() {
 
   useEffect(() => {
     const onDblClick = async (e: MouseEvent) => {
-      const selectedText = window.getSelection()?.toString().trim()
+      const target = e.target as HTMLElement
+      const captionSegment = target.closest(".ytp-caption-segment")
+
+      let selectedText = window.getSelection()?.toString().trim()
+
+      if (!selectedText && captionSegment) {
+        let node: Node | null = null
+        let offset = 0
+
+        const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
+        if (pos) {
+          node = pos.offsetNode
+          offset = pos.offset
+        }
+
+        if (node && node.nodeType === Node.TEXT_NODE) {
+          const nodeText = node.textContent || ""
+          let start = offset
+          let end = offset
+          while (start > 0 && /\w/.test(nodeText[start - 1])) start--
+          while (end < nodeText.length && /\w/.test(nodeText[end])) end++
+          selectedText = nodeText.slice(start, end).trim()
+        }
+        if (!selectedText) {
+          selectedText = captionSegment.textContent?.trim()
+        }
+      }
+
       if (!selectedText) return
 
       // if (timeoutRef.current) {
