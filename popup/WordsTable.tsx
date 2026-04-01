@@ -1,158 +1,165 @@
-// import editSVG from "data-base64:~assets/icons/pen-fill.svg"
 import { useRef, useState, useEffect } from "react"
-import EditSVG from "react:~assets/icons/pen-fill.svg"
 import Speak from "react:~assets/icons/volume-down-fill.svg"
 import CaretUp from "react:~assets/icons/caret-up-fill.svg"
 import CaretDown from "react:~assets/icons/caret-down-fill.svg"
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 
-
 import { useCollections, useWords } from "../assets/storage/collections"
 import { speakWord } from "../assets/helpers/speech"
-import { useSettings } from "~assets/storage/settings";
+
+const LEVEL_LABEL: Record<string, string> = {
+  low: "Low",
+  medium: "Med",
+  high: "High",
+};
+
+const LEVEL_COLOR: Record<string, string> = {
+  low: "level-low",
+  medium: "level-medium",
+  high: "level-high",
+};
 
 function WordsTable(props) {
-  const { translateFrom,translateTo} = useSettings();
   const { collection, collectionWords } = props;
-  const [doShow, setDoShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [doEdit, setDoEdit] = useState(false);
-  const { words, deleteWord } = useWords();
+  const { deleteWord } = useWords();
   const { renameCollection, changeCollectionOrder } = useCollections();
   const inputRef = useRef<HTMLInputElement>(null);
-  const h4Ref = useRef<HTMLHeadingElement>(null);
+  const nameRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (doEdit) {
-      inputRef.current?.focus();
-    }
+    if (doEdit) inputRef.current?.focus();
   }, [doEdit]);
 
   useEffect(() => {
-    if (h4Ref.current && inputRef.current) {
-      const h4Width = h4Ref.current.offsetWidth;
-      inputRef.current.style.width = h4Width + 'px';
+    if (nameRef.current && inputRef.current) {
+      inputRef.current.style.width = nameRef.current.getBoundingClientRect().width + "px";
     }
-  }, [collection.name , doEdit]);
+  }, [collection.name, doEdit]);
 
-  function deleteTheWord(id, collectionId) {
-    deleteWord(id, collectionId)
-  }
-  function keyDown(e) {
-    if (e.key === "Enter") {
-      setDoEdit(false)
-      return
-    }
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") setDoEdit(false);
   }
 
   return (
-    <div className="mb-3 pb-1">
-      <div
-        className="d-flex justify-content-between align-items-center pointer animated-border-bottom"
-        onClick={() => {
-          setDoShow(!doShow)
-        }}>
-        <div className="d-flex align-items-center gap-2">
-          {doEdit && (
-            <input
-              className="fs-4 m-0 p-0 border-0 outline-0 caret-color-primary"
-              type="text"
-              value={collection.name}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => renameCollection(collection.id, e.target.value)}
-              onKeyDown={keyDown}
-              ref={inputRef}
-            />
-          )}
-          <h4 
-            ref={h4Ref}
-            className="fs-4 m-0"
-            style={doEdit ? { visibility: 'hidden', position: 'absolute' } : undefined}
-          >
-            {collection.name}
-          </h4>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setDoEdit(!doEdit);
-            }}
-            className={`btn border-0 outline-0 p-1`}>
+    <div className="wt-item">
+      {/* Header */}
+      <div className="wt-item__header" onClick={() => setIsOpen((v) => !v)}>
+        {/* Name */}
+        <div className="wt-item__info">
+          <div className="wt-item__name-row">
+            {doEdit && (
+              <input
+                className="wt-item__name border-0 p-0 bg-transparent caret-color-primary"
+                type="text"
+                value={collection.name}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => renameCollection(collection.id, e.target.value)}
+                onKeyDown={handleKeyDown}
+                ref={inputRef}
+              />
+            )}
+            <span
+              ref={nameRef}
+              className="wt-item__name"
+              style={doEdit ? { visibility: "hidden", position: "absolute" } : undefined}
+            >
+              {collection.name}
+            </span>
+            <button
+              className="wt-item__edit-btn btn border-0 p-0"
+              onClick={(e) => { e.stopPropagation(); setDoEdit((v) => !v); }}
+              title="Rename"
+            >
               <FontAwesomeIcon icon={faPen} className={`edit-btn__icon ${doEdit ? "primary" : ""}`} />
+            </button>
+          </div>
+          <span className="wt-item__count">{collectionWords.length} words</span>
+        </div>
+
+        {/* Order buttons */}
+        <div className="wt-item__order" onClick={(e) => e.stopPropagation()}>
+          <button className="btn btn_order border-0 p-0" onClick={() => changeCollectionOrder(collection.id, "up")} title="Move up">
+            <CaretUp className="edit-btn__icon" />
+          </button>
+          <button className="btn btn_order border-0 p-0" onClick={() => changeCollectionOrder(collection.id, "down")} title="Move down">
+            <CaretDown className="edit-btn__icon" />
           </button>
         </div>
 
-        <div className="d-flex align-items-center gap-2">
-          <p className="text m-0">{collectionWords.length} words</p>
-          
-          <div className="d-flex flex-column">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                changeCollectionOrder(collection.id, 'up');
-              }}
-              className="btn btn_order border-0 outline-0 p-0"
-              title="Move up">
-                <CaretUp className="edit-btn__icon" />
-            </button>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                changeCollectionOrder(collection.id, 'down');
-              }}
-              className="btn btn_order border-0 outline-0 p-0"
-              title="Move down">
-                <CaretDown className="edit-btn__icon" />
-            </button>
-          </div>
+        {/* Chevron */}
+        <div className={`wt-item__chevron ${isOpen ? "wt-item__chevron--open" : ""}`}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </div>
       </div>
 
-      <table
-        className={`table table-striped mb-0 ${doShow ? "table" : "d-none"}`}>
-        <thead>
-          <tr>
-            <th>Original</th>
-            <th>Translation</th>
-            <th className="text-center">Priority</th>
-            <th className="text-end">Delete</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {collectionWords.map((value, key) => (
-            <tr key={value.id ?? key} className="align-middle">
-              <td>
-                <div className="d-flex align-items-center gap-2">
-                  {value.originalText}
-                  <Speak 
-                    onClick={() => speakWord(value.originalText, value.originalLanguage)} 
-                    style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
-                  />
-                </div>
-              </td>
-              <td>
-                <div className="d-flex align-items-center gap-2">
-                  {value.translatedText}
-                  <Speak 
-                    onClick={() => speakWord(value.translatedText , value.translatedLanguage)} 
-                    style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
-                  />
-                </div>
-              </td>
-              <td className="text-center">{value.priority}</td>
-              <td className="text-end">
-                <button
-                  onClick={() => deleteTheWord(value.id, collection.id)}
-                  className="btn btn-close btn-danger"
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Words table */}
+      {isOpen && (
+        <div className="wt-item__words">
+          {collectionWords.length === 0 ? (
+            <p className="wt-item__words-empty">No words in this collection</p>
+          ) : (
+            <table className="wt-words-table w-100">
+              <thead>
+                <tr>
+                  <th>Original</th>
+                  <th>Translation</th>
+                  <th className="text-center">Priority</th>
+                  <th className="text-center">Level</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {collectionWords.map((w) => (
+                  <tr key={w.id}>
+                    <td>
+                      <div className="wt-cell">
+                        <span>{w.originalText}</span>
+                        <Speak
+                          className="wt-speak"
+                          onClick={(e) => { e.stopPropagation(); speakWord(w.originalText, w.originalLanguage); }}
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <div className="wt-cell">
+                        <span className="wt-translated">{w.translatedText}</span>
+                        <Speak
+                          className="wt-speak"
+                          onClick={(e) => { e.stopPropagation(); speakWord(w.translatedText, w.translatedLanguage); }}
+                        />
+                      </div>
+                    </td>
+                    <td className="text-center">
+                      <span className="wt-priority">{w.priority}</span>
+                    </td>
+                    <td className="text-center">
+                      <span className={`badge ${LEVEL_COLOR[w.level] ?? "level-low"}`}>
+                        {LEVEL_LABEL[w.level] ?? w.level}
+                      </span>
+                    </td>
+                    <td className="text-end">
+                      <button
+                        className="wt-delete btn border-0 p-0"
+                        onClick={(e) => { e.stopPropagation(); deleteWord(w.id, collection.id); }}
+                        title="Delete"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                          <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
     </div>
   )
 }

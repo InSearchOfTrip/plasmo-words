@@ -15,9 +15,9 @@ function IndexPopup() {
   const { collections } = useCollections()
 
   return (
-    <div className="words p-2 shadow border-dark-subtle pr-0 bg-white">
-      <div className="scroll">
-        <h2 className="fs-2 text-center">FreqWords</h2>
+    <div className="words p-2 shadow border-dark-subtle bg-white">
+      <div className="scroll py-2">
+        <h2 className="fs-4 text-center mb-3">FreqWords</h2>
         {Object.keys(words).length > 0 ? (
           Object.values(collections)
             .sort((a, b) => a.order - b.order)
@@ -26,8 +26,8 @@ function IndexPopup() {
               word.collectionIds.includes(collection.id)
             )
 
-            if (collectionWords.length === 0) return 
-            const sortedCollectionWords = collectionWords.sort( (a, b) => b.priority - a.priority);
+            if (collectionWords.length === 0) return null
+            const sortedCollectionWords = collectionWords.sort((a, b) => b.priority - a.priority);
             return (
               <WordsTable
                 key={collection.id}
@@ -37,15 +37,15 @@ function IndexPopup() {
             )
           })
         ) : (
-          <p className="text p-0"> You don't have added words yet</p>
+          <p className="text-secondary text-center p-3 m-0">You don't have added words yet</p>
         )}
       </div>
-      <div className="d-flex gap-2">
-        <a className="btn btn-primary flex-fill" href="options.html">
+      <div className="d-flex gap-2 pt-2 border-top">
+        <a className="btn btn-outline-secondary flex-fill" href="options.html">
           Settings
         </a>
-        <a className="btn btn-secondary flex-fill" href="tabs/learn.html" target="_blank">
-          LearnGround
+        <a className="btn btn-primary flex-fill" href="tabs/learn.html" target="_blank">
+          Learn
         </a>
       </div>
     </div>
