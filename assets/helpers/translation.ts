@@ -29,23 +29,11 @@ export const LANGUAGES = [
   { code: "id", label: "ID" },
   { code: "ms", label: "MS" }
 ]
-function getAuthToken(): Promise<string> {
-  return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive: true }, (token) => {
-      if (chrome.runtime.lastError || !token) {
-        reject(new Error(chrome.runtime.lastError?.message ?? "Failed to get auth token"))
-      } else {
-        resolve(token)
-      }
-    })
-  })
-}
+const apiKey = process.env.PLASMO_PUBLIC_GOOGLE_TRANSLATION_API_KEY
 
 export async function fetchTranslation(word: string, translateFrom: string, translateTo: string): Promise<string> {
-  const token = await getAuthToken()
   const response = await fetch(
-    `https://translation.googleapis.com/language/translate/v2?q=${encodeURIComponent(word)}&source=${translateFrom}&target=${translateTo}&format=text`,
-    { headers: { Authorization: `Bearer ${token}` } }
+    `https://translation.googleapis.com/language/translate/v2?key=${apiKey}&q=${encodeURIComponent(word)}&source=${translateFrom}&target=${translateTo}&format=text`
   )
   const data = await response.json()
   if (data.error) {
