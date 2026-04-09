@@ -29,12 +29,27 @@ export const LANGUAGES = [
   { code: "id", label: "ID" },
   { code: "ms", label: "MS" }
 ]
+function getAuthToken(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive: true }, (token) => {
+      if (chrome.runtime.lastError || !token) {
+        reject(new Error(chrome.runtime.lastError?.message ?? "Failed to get auth token"))
+      } else {
+        resolve(token)
+      }
+    })
+  })
+}
 
-export async function fetchTranslation(word:string ,translateFrom:string , translateTo:string): Promise<string> {
-  const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${translateFrom}&tl=${translateTo}&dt=t&q=${encodeURIComponent(word)}`);
-  const data = await response.json();
-  return data[0][0][0];
-  // const response = await fetch(`https://lingva.ml/api/v1/${translateFrom}/${translateTo}/${encodeURIComponent(word)}`);
-  // const data = await response.json();
-  // return data.translation;
+export async function fetchTranslation(word: string, translateFrom: string, translateTo: string): Promise<string> {
+  const token = await getAuthToken()
+  const response = await fetch(
+    `https://translation.googleapis.com/language/translate/v2?q=${encodeURIComponent(word)}&source=${translateFrom}&target=${translateTo}&format=text`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error.message)
+  }
+  return data.data.translations[0].translatedText
 }

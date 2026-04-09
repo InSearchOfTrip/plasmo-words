@@ -28,11 +28,19 @@
     "typescript": "5.3.3"
   },
   "manifest": {
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoD6lJ5rQ6zZOSv5RyU/XByvfLg7X7GFmxwt4NqOJtkYAzFmkcuneCwM9gBOn256gVrAKEx+bvXbAoaarzePSah5wzAkPP26mhLTmfc41aEFB+6S0zQqZkRCoNAUPhjCw1OAGL31yu9I7SrxQpVz9XfbmLgEHijtOj5geynnYIR49gGMHxb7LJTRnItTFQpZmQTcvfxTBc1YBmXYonRDikQ0fqp4O35W9UFodwhgvwEgUubZXer4LLlemOXAXnkI3OfPDbsyTClVPzF5llAUtXA62PxiWwqN6TDYxg82vpXdmsylGlPf9jNwrGyy5RukXvorGwB89QtTLnuQamYoE2QIDAQAB",
     "host_permissions": [
       "https://*/*"
     ],
     "permissions": [
-      "storage"
-    ]
+      "storage",
+      "identity"
+    ],
+    "oauth2": {
+      "client_id": "424596081403-fpf2k2gh9db90h1kctb9kesc3p71b1f5.apps.googleusercontent.com",
+      "scopes": [
+        "https://www.googleapis.com/auth/cloud-translation"
+      ]
+    }
   }
 }

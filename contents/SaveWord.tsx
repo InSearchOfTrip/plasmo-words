@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react"
 import Plus from "react:~assets/icons/plus-square-fill.svg"
 import Speak from "react:~assets/icons/volume-down-fill.svg"
 
-import { fetchTranslation, LANGUAGES } from "~assets/helpers/translation"
+import { LANGUAGES } from "~assets/helpers/translation"
 import { speakWord } from "~assets/helpers/speech"
 
 import { useCollections, useWords } from "../assets/storage/collections"
@@ -26,7 +26,8 @@ export const config: PlasmoCSConfig = {
   css: ["./bootstrap.min.css"]
 }
 
-function uppercase(str) {
+function uppercase(str: string) {
+  if (!str) return ""
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
@@ -76,8 +77,15 @@ export default function SaveWord() {
     setShowAddCollection(false)
   }
   async function translateTheWord(word) {
-    const translated = await fetchTranslation(word, translateFrom, translateTo);
-    setTranslationText(uppercase(translated));
+    const response = await chrome.runtime.sendMessage({
+      type: "TRANSLATE",
+      payload: { word, translateFrom, translateTo }
+    })
+    if (response?.success) {
+      setTranslationText(uppercase(response.translation))
+    } else {
+      console.error("Translation failed:", response?.error)
+    }
   }
 
   useEffect(() => {
