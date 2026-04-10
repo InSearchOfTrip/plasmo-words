@@ -1,9 +1,9 @@
 {
-  "name": "plasmo-words",
-  "displayName": "Plasmo words",
+  "name": "FreqWords",
+  "displayName": "FreqWords",
   "version": "0.0.1",
   "description": "Learn words",
-  "author": "Oleksandr CHervonyi",
+  "author": "Oleksandr Chervonyi",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
