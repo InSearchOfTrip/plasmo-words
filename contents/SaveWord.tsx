@@ -2,7 +2,7 @@ import bootstrap from "data-text:../assets/styles/bootstrap.min.css"
 import normalize from "data-text:../assets/styles/normalize.css"
 import moduleStyles from "data-text:./style.scss"
 import type { PlasmoCSConfig } from "plasmo"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 // import "./style.scss"
 
 import Plus from "react:~assets/icons/plus-square-fill.svg"
@@ -66,6 +66,8 @@ export default function SaveWord() {
   })
 
   const timeoutRef = useRef(null)
+  const popupRef = useRef<HTMLDivElement>(null)
+  const positionAdjusted = useRef(false)
 
   function addTheWord() {
     addWord(text, translateFrom, translation, translateTo, collectionByDefault)
@@ -124,6 +126,7 @@ export default function SaveWord() {
       //   clearTimeout(timeoutRef.current)
       // }
 
+      positionAdjusted.current = false
       setPosition({ x: e.pageX, y: e.pageY })
       setText(uppercase(selectedText))
       setVisible(true)
@@ -152,6 +155,20 @@ export default function SaveWord() {
     translateTheWord(text)
   }, [text, translateFrom, translateTo, doTranslation])
 
+  useLayoutEffect(() => {
+    if (!visible || !popupRef.current || positionAdjusted.current) return
+    positionAdjusted.current = true
+
+    const popup = popupRef.current
+    const maxX = window.scrollX + window.innerWidth - popup.offsetWidth - 8
+    const maxY = window.scrollY + window.innerHeight - popup.offsetHeight - 8
+
+    setPosition(prev => ({
+      x: Math.max(0, Math.min(prev.x, maxX)),
+      y: Math.max(0, Math.min(prev.y, maxY))
+    }))
+  }, [visible, position])
+
   useEffect(
     function () {
       getCollection().then((res) => {
@@ -168,13 +185,14 @@ export default function SaveWord() {
   return (
     (doSaveWords || doTranslation) && (
       <div
+        ref={popupRef}
         className="p-3 bg-transparent"
         style={{
           position: "absolute",
           top: position.y,
           left: position.x,
           zIndex: 999999,
-          width: "400px"
+          minWidth: "400px"
         }}
         onDoubleClick={(e) => e.stopPropagation()}>
         <div className="rounded-3 border container shadow border-dark-subtle p-2 bg-white">
